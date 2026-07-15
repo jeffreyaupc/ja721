@@ -1,17 +1,42 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useRef, useState, useTransition } from "react";
 import type { Item, Note, NoteTemplate } from "@/lib/types";
 import { updateNoteBody } from "@/actions/notes";
 import { updateItemField } from "@/actions/items";
 import { EditableText } from "./EditableText";
+import { NoteImageUploader } from "./NoteImageUploader";
 import { StandardNoteArticle } from "@/components/notes/StandardNoteArticle";
+
+function insertSnippet(
+  el: HTMLTextAreaElement | null,
+  value: string,
+  setValue: (v: string) => void,
+  snippet: string
+) {
+  if (!el) {
+    setValue(value + snippet);
+    return;
+  }
+  const start = el.selectionStart ?? value.length;
+  const end = el.selectionEnd ?? value.length;
+  const next = value.slice(0, start) + snippet + value.slice(end);
+  setValue(next);
+  requestAnimationFrame(() => {
+    el.focus();
+    const pos = start + snippet.length;
+    el.setSelectionRange(pos, pos);
+  });
+}
 
 export function NoteBodyEditor({ item, note }: { item: Item; note: Note }) {
   const [template, setTemplate] = useState<NoteTemplate>(note.template);
   const [markdown, setMarkdown] = useState(note.markdown_body ?? "");
+  const [customHtml, setCustomHtml] = useState(note.custom_html ?? "");
   const [isPending, startTransition] = useTransition();
   const [saved, setSaved] = useState(false);
+  const markdownRef = useRef<HTMLTextAreaElement>(null);
+  const customHtmlRef = useRef<HTMLTextAreaElement>(null);
 
   function handleSubmit(formData: FormData) {
     setSaved(false);
@@ -19,6 +44,19 @@ export function NoteBodyEditor({ item, note }: { item: Item; note: Note }) {
       await updateNoteBody(item.id, formData);
       setSaved(true);
     });
+  }
+
+  function handleImageUploaded(url: string) {
+    if (template === "standard") {
+      insertSnippet(markdownRef.current, markdown, setMarkdown, `\n![](${url})\n`);
+    } else {
+      insertSnippet(
+        customHtmlRef.current,
+        customHtml,
+        setCustomHtml,
+        `<img src="${url}" alt="" />`
+      );
+    }
   }
 
   return (
@@ -64,10 +102,13 @@ export function NoteBodyEditor({ item, note }: { item: Item; note: Note }) {
           </select>
         </label>
 
+        <NoteImageUploader itemId={item.id} onUploaded={handleImageUploaded} />
+
         {template === "standard" ? (
           <label className="flex flex-col gap-1 text-sm">
             Markdown 內容
             <textarea
+              ref={markdownRef}
               name="markdown_body"
               value={markdown}
               onChange={(e) => setMarkdown(e.target.value)}
@@ -80,8 +121,10 @@ export function NoteBodyEditor({ item, note }: { item: Item; note: Note }) {
             <label className="flex flex-col gap-1 text-sm">
               自訂 HTML
               <textarea
+                ref={customHtmlRef}
                 name="custom_html"
-                defaultValue={note.custom_html ?? ""}
+                value={customHtml}
+                onChange={(e) => setCustomHtml(e.target.value)}
                 rows={12}
                 className="rounded border border-line bg-paper px-2 py-1 font-mono text-xs"
               />
