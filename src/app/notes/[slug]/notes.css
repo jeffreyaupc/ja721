@@ -1,0 +1,87 @@
+.standard-note {
+  min-height: 100vh;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 72px 24px 96px;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "Noto Sans TC", sans-serif;
+  font-weight: 300;
+  line-height: 1.9;
+}
+
+.standard-note h1,
+.standard-note h2,
+.standard-note h3 {
+  font-family: "Noto Serif TC", serif;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.4;
+}
+
+.standard-note h1 {
+  font-size: 2.25rem;
+  margin: 0 0 1.5rem;
+}
+
+.standard-note h2 {
+  font-size: 1.5rem;
+  margin: 2rem 0 1rem;
+}
+
+.standard-note p {
+  margin: 0 0 1.25rem;
+}
+
+.standard-note a {
+  color: var(--seal);
+}
+
+.standard-note code {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.9em;
+  background: var(--paper-2);
+  padding: 0.1em 0.3em;
+  border-radius: 2px;
+}
+
+.standard-note blockquote {
+  margin: 0 0 1.25rem;
+  padding-left: 1rem;
+  border-left: 2px solid var(--line);
+  color: var(--ink-soft);
+}
+
+.standard-note .eyebrow {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin: 0 0 1rem;
+}
+
+.standard-note-back {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  text-decoration: none;
+}
+
+.note-editor-panel {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 24px;
+  background: var(--paper-2);
+  color: var(--ink);
+  font-family: "Noto Sans TC", sans-serif;
+  border-top: 1px solid var(--line);
+}
+
+.note-editor-panel textarea,
+.note-editor-panel input,
+.note-editor-panel select {
+  width: 100%;
+}

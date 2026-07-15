@@ -1,0 +1,17 @@
+:root {
+  --paper: #ede6d6;
+  --paper-2: #e2d9c3;
+  --paper-3: #f4efe2;
+  --ink: #231f1a;
+  --ink-soft: #5b5646;
+  --ink-faint: #8a8370;
+  --seal: #a23a2c;
+  --moss: #5c6b4c;
+  --line: #c9bfa6;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
